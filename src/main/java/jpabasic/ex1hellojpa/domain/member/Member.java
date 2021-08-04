@@ -31,7 +31,7 @@ public class Member {
     @OneToMany(mappedBy = "member")
     List<Order> orders = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
     private Team team;
 
