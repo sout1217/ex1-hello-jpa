@@ -31,4 +31,11 @@ public class Member {
     @OneToMany(mappedBy = "member")
     List<Order> orders = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_id")
+    private Team team;
+
+    public void changeTeam(Team team) {
+        this.team = team;
+    }
 }
