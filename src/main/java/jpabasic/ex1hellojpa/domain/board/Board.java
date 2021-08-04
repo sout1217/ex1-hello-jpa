@@ -1,5 +1,6 @@
-package jpabasic.ex1hellojpa.domain;
+package jpabasic.ex1hellojpa.domain.board;
 
+import jpabasic.ex1hellojpa.domain.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
