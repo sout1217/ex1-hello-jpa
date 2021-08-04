@@ -10,7 +10,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import java.time.LocalDateTime;
 
-public class EmManager {
+public class EmManager2 {
 
     public static void main(String[] args) {
 
@@ -31,24 +31,9 @@ public class EmManager {
             em.persist(member);
             em.persist(order);
 
-            em.flush();
-            em.clear();
-            System.err.println("clear------------");
-
-            Member findMember = em.getReference(Member.class, member.getId());
-            System.err.println("------------");
-            System.err.println(findMember.getId());
-            System.err.println("------------");
-            System.err.println(findMember.getName());
-            System.err.println("------------");
-            System.err.println(findMember.getOrders());
-            System.err.println("------------");
-            System.err.println(findMember.getClass());
-            System.err.println(member.getClass());
-            System.err.println(findMember.getClass() == member.getClass());
-            System.err.println("------------");
-            System.err.println(findMember instanceof Member);
-            System.err.println("------------");
+            Member reference = em.getReference(Member.class, member.getId());
+            System.err.println(reference.getClass());
+            System.err.println(reference);
 
             tx.commit();
         } catch (Exception e) {

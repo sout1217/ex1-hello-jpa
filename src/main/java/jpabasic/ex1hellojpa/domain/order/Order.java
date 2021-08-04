@@ -2,6 +2,9 @@ package jpabasic.ex1hellojpa.domain.order;
 
 import jpabasic.ex1hellojpa.domain.delivery.Delivery;
 import jpabasic.ex1hellojpa.domain.member.Member;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,6 +13,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "orders")
+@Setter
+@Getter
+@ToString
 public class Order {
 
     @Id
@@ -32,4 +38,9 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
+
+    public void changeMember(Member member) {
+        this.member = member;
+        member.getOrders().add(this);
+    }
 }

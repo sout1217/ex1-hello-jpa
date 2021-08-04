@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@ToString
+@ToString(exclude = "orders")
 @Getter
 @Setter
 public class Member {
