@@ -1,14 +1,13 @@
 package jpabasic.ex1hellojpa;
 
 
+import jpabasic.ex1hellojpa.domain.member.Address;
 import jpabasic.ex1hellojpa.domain.member.Member;
-import jpabasic.ex1hellojpa.domain.member.Team;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import java.util.List;
 
 public class EmManager {
 
@@ -21,28 +20,38 @@ public class EmManager {
         tx.begin();
         try {
 
-            Team team = new Team();
-            team.setName("Rose Class");
-            em.persist(team);
-
             Member member = new Member();
             member.setName("martin");
-//            member.setCity("seoul");
-            member.changeTeam(team);
+            member.setHomeAddress(new Address("homeCity", "street2", "10000"));
+
+            member.getFavoriteFoods().add("치킨");
+            member.getFavoriteFoods().add("족발");
+            member.getFavoriteFoods().add("피자");
+
+            member.getAddressHistory().add(new Address("old1", "street", "12000"));
+            member.getAddressHistory().add(new Address("old2", "street", "13000"));
+
             em.persist(member);
 
             em.flush();
             em.clear();
 
-            // em.find 는 PK 를 찍어서 하는 것 이기 때문에 team 까지 조회하는 최적화 쿼리문을 만들어준다
-//            Member findMember = em.find(Member.class, member.getId());
+            Member findMember = em.find(Member.class, 1L);
+            Address homeAddress = member.getHomeAddress();
 
-            // EAGER 로 세팅했는 데도 쿼리가 2번 나간다
-            // SQL 로 그대로 번역이 된다 그대로 사용되면 Team 을 인자로 전달해주지 않았기 때문에 Member 만 조회 된다
-            // 조회 된 후 EAGER 로딩이 적혀있다는 것을 확인 한 후 그 때 Team 을 조회하는 쿼리문이 나가 쿼리문이 2번 조회가 된다
-            // 이럴 경우 Member List 안에 10 명이 존재한다면 10번이나 조회를 더 하는 문제가 생긴다
-            List<Member> members = em.createQuery("SELECT m FROM Member m", Member.class).getResultList();
+            // 이 방법은 옳지 않다, 값 타입은 수정이아닌 교체를 해야한다 !
+            // homeCity => newCity
+            // findMember.getHomeAddress().setCity("newCity");
+            findMember.setHomeAddress(new Address("newCity", homeAddress.getStreet(), homeAddress.getZipcode()));
 
+            // String 같은 경우 지우고 새로 넣는 것 이다
+            // 치킨 -> 한식
+            findMember.getFavoriteFoods().remove("치킨");
+            findMember.getFavoriteFoods().add("한식");
+
+            // list 는 비교할때 eq로 비교하기 때문에 eq hash code 가 제데로 구현되있다면 제거 된다
+            findMember.getAddressHistory().remove(new Address("old1", "street", "12000"));
+            findMember.getAddressHistory().add(new Address("newCity1", "street", "12000"));
 
             tx.commit();
         } catch (Exception e) {
