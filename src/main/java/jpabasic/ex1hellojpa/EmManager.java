@@ -2,8 +2,8 @@ package jpabasic.ex1hellojpa;
 
 
 import jpabasic.ex1hellojpa.domain.member.Address;
-import jpabasic.ex1hellojpa.domain.member.AddressHistory;
 import jpabasic.ex1hellojpa.domain.member.Member;
+import jpabasic.ex1hellojpa.domain.member.MemberDto;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -24,30 +24,16 @@ public class EmManager {
 
             Member member = new Member();
             member.setName("martin");
+            member.setAge(19);
             member.setHomeAddress(new Address("homeCity", "street2", "10000"));
-
-            member.getFavoriteFoods().add("치킨");
-            member.getFavoriteFoods().add("족발");
-            member.getFavoriteFoods().add("피자");
-
-            member.getAddressHistory().add(new AddressHistory(new Address("osan", "street", "10000")));
-            member.getAddressHistory().add(new AddressHistory(new Address("dongtan", "street", "20000")));
-            member.getAddressHistory().add(new AddressHistory(new Address("busan", "street", "30000")));
 
             em.persist(member);
 
             em.flush();
             em.clear();
 
-            Member findMember = em.find(Member.class, 1L);
-
-
-            // update 쿼리가 나가는 것은 @OneToMany 단방향 매핑이라 어쩔 수 없다
-            List<AddressHistory> addressHistory = findMember.getAddressHistory();
-
-            addressHistory.remove(1);
-            addressHistory.add(new AddressHistory(new Address("suwon", "street", "40000")));
-
+            List<MemberDto> result = em.createQuery("select new jpabasic.ex1hellojpa.domain.member.MemberDto(m.name, m.age) from Member m", MemberDto.class).getResultList();
+            System.out.println(result.get(0).getName());
 
             tx.commit();
         } catch (Exception e) {

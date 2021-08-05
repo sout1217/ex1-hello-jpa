@@ -52,6 +52,8 @@ public class Member {
     @JoinColumn(name = "team_id")
     private Team team;
 
+    private int age;
+
     public void changeTeam(Team team) {
         this.team = team;
     }
