@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@ToString(exclude = "orders")
+@ToString(exclude = {"orders", "team"})
 @Getter
 @Setter
 public class Member {
