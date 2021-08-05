@@ -27,7 +27,7 @@ public class EmManager {
 
             Member member = new Member();
             member.setName("martin");
-            member.setCity("seoul");
+//            member.setCity("seoul");
             member.changeTeam(team);
             em.persist(member);
 

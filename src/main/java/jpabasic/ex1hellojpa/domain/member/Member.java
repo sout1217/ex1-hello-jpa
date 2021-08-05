@@ -22,11 +22,17 @@ public class Member {
 
     private String name;
 
-    private String city;
+    @Embedded
+    private Address homeAddress;
 
-    private String street;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "city", column = @Column(name = "work_city")),
+            @AttributeOverride(name = "street", column = @Column(name = "work_street")),
+            @AttributeOverride(name = "zipcode", column = @Column(name = "work_zip_code"))
+    })
+    private Address workAddress;
 
-    private String zipcode;
 
     @OneToMany(mappedBy = "member")
     List<Order> orders = new ArrayList<>();
