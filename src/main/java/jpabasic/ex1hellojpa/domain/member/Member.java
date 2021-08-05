@@ -37,12 +37,13 @@ public class Member {
 
     @ElementCollection
     @CollectionTable(name = "favorite_food", joinColumns = @JoinColumn(name = "member_id"))
-    @Column(name = "food_name") // 컬럼명이 1개 이기 때문에 직적 컬럼명을 정해준다 (Address 안에 컬럼명이 이미 존재함)
+    @Column(name = "food_name")
+    // 컬럼명이 1개 이기 때문에 직적 컬럼명을 정해준다 (Address 안에 컬럼명이 이미 존재함)
     private Set<String> favoriteFoods = new HashSet<>();
 
-    @ElementCollection
-    @CollectionTable(name = "address", joinColumns = @JoinColumn(name = "member_id"))
-    private List<Address> addressHistory = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "member_id")
+    List<AddressHistory> addressHistory = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
     List<Order> orders = new ArrayList<>();
